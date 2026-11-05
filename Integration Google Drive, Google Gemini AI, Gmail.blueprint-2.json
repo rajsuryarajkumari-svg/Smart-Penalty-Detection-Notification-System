@@ -1,0 +1,1701 @@
+{
+    "name": "Integration Google Drive, Google Gemini AI, Gmail",
+    "flow": [
+        {
+            "id": 1,
+            "module": "google-drive:watchFilesInAFolder",
+            "version": 4,
+            "parameters": {
+                "limit": 2,
+                "select": "create",
+                "folderId": "/1ogx4F-W2spRdZRXcCR1vimxl6GTCtQWB",
+                "mimeType": "all",
+                "__IMTCONN__": 10269894,
+                "destination": "drive"
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 191,
+                    "y": 320
+                },
+                "restore": {
+                    "parameters": {
+                        "select": {
+                            "label": "By Created Time"
+                        },
+                        "folderId": {
+                            "path": [
+                                "json"
+                            ]
+                        },
+                        "mimeType": {
+                            "label": "All"
+                        },
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google-drive"
+                            },
+                            "label": "Manikantha's Google Drive connection (rajsurya.rajkumari@gmail.com)"
+                        },
+                        "destination": {
+                            "label": "My Drive"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google-restricted,google-drive",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Watch Files",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "create",
+                                "modify"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "destination",
+                        "type": "select",
+                        "label": "Choose a Drive",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "drive",
+                                "share",
+                                "team"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "mimeType",
+                        "type": "select",
+                        "label": "File Types to Watch",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "all",
+                                "document",
+                                "spreadsheet",
+                                "slide",
+                                "drawing"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "type": "uinteger",
+                        "label": "Limit",
+                        "required": true
+                    },
+                    {
+                        "name": "folderId",
+                        "type": "folder",
+                        "label": "Select the Folder to be Watched",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 22,
+            "module": "google-drive:getAFile",
+            "version": 4,
+            "parameters": {
+                "__IMTCONN__": 10269894
+            },
+            "filter": null,
+            "mapper": {
+                "file": "{{1.id}}",
+                "select": "map",
+                "formatDrawings": "image/png",
+                "formatDocuments": "text/plain",
+                "formatSpreadsheets": "text/csv",
+                "formatPresentations": "application/pdf"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 517,
+                    "y": 309
+                },
+                "restore": {
+                    "expect": {
+                        "select": {
+                            "label": "Enter manually"
+                        },
+                        "formatDrawings": {
+                            "label": "PNG"
+                        },
+                        "formatDocuments": {
+                            "label": "Text (txt)"
+                        },
+                        "formatSpreadsheets": {
+                            "label": "Comma Separated Values (CSV)"
+                        },
+                        "formatPresentations": {
+                            "label": "PDF"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "google-drive"
+                            },
+                            "label": "Manikantha's Google Drive connection (rajsurya.rajkumari@gmail.com)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:google-restricted,google-drive",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "select",
+                        "type": "select",
+                        "label": "Enter a File ID",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "map",
+                                "value"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatDocuments",
+                        "type": "select",
+                        "label": "Convert Google Documents Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                                "application/pdf",
+                                "application/vnd.oasis.opendocument.text",
+                                "text/html",
+                                "text/plain",
+                                "application/rtf",
+                                "text/markdown"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatSpreadsheets",
+                        "type": "select",
+                        "label": "Convert Google Spreadsheets Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "application/x-vnd.oasis.opendocument.spreadsheet",
+                                "application/pdf",
+                                "text/csv"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatPresentations",
+                        "type": "select",
+                        "label": "Convert Google Slides Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                                "application/pdf"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "formatDrawings",
+                        "type": "select",
+                        "label": "Convert Google Drawings Files to Format",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "image/jpeg",
+                                "image/png",
+                                "image/svg+xml",
+                                "application/pdf"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "file",
+                        "type": "text",
+                        "label": "File ID",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "gemini-ai:createACompletionGeminiPro",
+            "version": 1,
+            "parameters": {
+                "__IMTCONN__": 10776255
+            },
+            "mapper": {
+                "model": "gemini-3.5-flash",
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {
+                                "text": "Analyze this CSV text. Process every CSV row independently. Return ONLY a valid JSON array, with one object per input row, and no Markdown or code fences. Each object must preserve the row's original fields and add exactly these classification fields: existence_tag, application_tag, classification_note. existence_tag must be exactly PENALTY_EXIST or NO_PENALTY. If existence_tag is PENALTY_EXIST, application_tag must be exactly PENALTY_APPLIES or PENALTY_NOT_APPLICABLE. If existence_tag is NO_PENALTY, application_tag must be null. Do not invent missing values; use classification_note when the source is insufficient to determine the classification.\n\nCSV text:\n{{22.data}}",
+                                "type": "text"
+                            }
+                        ]
+                    }
+                ],
+                "generationConfig": {
+                    "imageConfig": {},
+                    "thinkingConfig": {},
+                    "responseMimeType": "application/json"
+                },
+                "system_instruction": {
+                    "parts": [
+                        {
+                            "text": "You are a CSV data extraction and classification assistant.\n\nRead the provided CSV as a table. Each row represents one completely separate dataset. Process every row independently and preserve the information exactly as recorded.\n\nFor each row:\n\n1. Extract all required data and fields from that row.\n2. First determine whether a penalty exists using the relevant penalty information in that row.\n3. Add an existence tag:\n\n   * `PENALTY_EXIST` — when a penalty exists.\n   * `NO_PENALTY` — when no penalty exists.\n4. If a penalty exists, separately determine whether the penalty applies based on the information recorded in that same row.\n5. Add an application tag:\n\n   * `PENALTY_APPLIES` — when the penalty applies.\n   * `PENALTY_NOT_APPLICABLE` — when the penalty exists but does not apply.\n\nThe existence tag and application tag are separate classifications. Never overwrite, replace, or use one tag in place of the other.\n\nExamples:\n\n* Penalty exists + applies → `PENALTY_EXIST` + `PENALTY_APPLIES`\n* Penalty exists + does not apply → `PENALTY_EXIST` + `PENALTY_NOT_APPLICABLE`\n* No penalty exists → `NO_PENALTY` and do not assign `PENALTY_APPLIES` or `PENALTY_NOT_APPLICABLE` unless the source data explicitly requires an application status.\n\nCreate one separate structured output for every CSV row. Never combine multiple rows into one output, skip valid rows, modify source values, or invent missing information.\n\nIf the CSV does not contain enough information to determine a classification, do not guess. Preserve the available data and indicate that the classification cannot be determined from the provided information.\n"
+                        }
+                    ]
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": 300,
+                    "name": "file analyze"
+                },
+                "restore": {
+                    "expect": {
+                        "model": {
+                            "mode": "chose",
+                            "label": "Gemini 3.5 Flash"
+                        },
+                        "contents": {
+                            "mode": "chose",
+                            "items": [
+                                {
+                                    "role": {
+                                        "mode": "chose",
+                                        "label": "User"
+                                    },
+                                    "parts": {
+                                        "mode": "chose",
+                                        "items": [
+                                            {
+                                                "type": {
+                                                    "mode": "chose",
+                                                    "label": "Text"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        "serviceTier": {
+                            "mode": "chose",
+                            "label": "Empty"
+                        },
+                        "url_context": {
+                            "mode": "chose"
+                        },
+                        "code_execution": {
+                            "mode": "chose"
+                        },
+                        "safetySettings": {
+                            "mode": "chose"
+                        },
+                        "generationConfig": {
+                            "nested": {
+                                "imageConfig": {
+                                    "nested": {
+                                        "imageSize": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        }
+                                    }
+                                },
+                                "stopSequences": {
+                                    "mode": "chose"
+                                },
+                                "thinkingConfig": {
+                                    "nested": {
+                                        "thinking_level": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        },
+                                        "include_thoughts": {
+                                            "mode": "chose"
+                                        }
+                                    }
+                                },
+                                "mediaResolution": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "responseMimeType": {
+                                    "mode": "chose",
+                                    "label": "JSON Output"
+                                },
+                                "new_responseSchema": {
+                                    "mode": "chose"
+                                },
+                                "responseModalities": {
+                                    "mode": "chose"
+                                }
+                            }
+                        },
+                        "system_instruction": {
+                            "nested": {
+                                "parts": {
+                                    "mode": "chose",
+                                    "items": [
+                                        null
+                                    ]
+                                }
+                            }
+                        },
+                        "google_maps_context": {
+                            "mode": "chose"
+                        },
+                        "google_search_context": {
+                            "mode": "chose"
+                        },
+                        "file_search_store_context": {
+                            "mode": "chose"
+                        },
+                        "function_declarations_context": {
+                            "mode": "chose"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "gemini-ai-q9zyjp"
+                            },
+                            "label": "Manikantha's Gemini AI connection"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:gemini-ai-q9zyjp",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "model",
+                        "type": "select",
+                        "label": "AI Model",
+                        "required": true
+                    },
+                    {
+                        "name": "contents",
+                        "spec": [
+                            {
+                                "name": "role",
+                                "type": "select",
+                                "label": "Role",
+                                "options": [
+                                    {
+                                        "label": "User",
+                                        "value": "user"
+                                    },
+                                    {
+                                        "label": "Model",
+                                        "value": "model"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            {
+                                "name": "parts",
+                                "spec": [
+                                    {
+                                        "name": "type",
+                                        "type": "select",
+                                        "label": "Message Type",
+                                        "options": [
+                                            {
+                                                "label": "Text",
+                                                "value": "text",
+                                                "nested": [
+                                                    {
+                                                        "name": "text",
+                                                        "type": "text",
+                                                        "label": "Text",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "File",
+                                                "value": "file",
+                                                "nested": [
+                                                    {
+                                                        "name": "file_data",
+                                                        "spec": [
+                                                            {
+                                                                "name": "mime_type",
+                                                                "type": "text",
+                                                                "label": "Mime Type",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "help": "You can use public or signed URLs as input by using the URLs.",
+                                                                "name": "file_uri",
+                                                                "type": "text",
+                                                                "label": "File URI",
+                                                                "required": true
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "File Data",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Function Call",
+                                                "value": "functionCall",
+                                                "nested": [
+                                                    {
+                                                        "name": "functionCall",
+                                                        "spec": [
+                                                            {
+                                                                "help": "The name of the function to call.",
+                                                                "name": "name",
+                                                                "type": "text",
+                                                                "label": "Name",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 64
+                                                                }
+                                                            },
+                                                            {
+                                                                "help": "The function parameters and values in JSON object format.",
+                                                                "name": "args",
+                                                                "type": "json",
+                                                                "label": "Arguments"
+                                                            },
+                                                            {
+                                                                "help": "The unique ID of the function call.",
+                                                                "name": "id",
+                                                                "type": "text",
+                                                                "label": "Function Call ID"
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Function Call"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "label": "Function Response",
+                                                "value": "functionResponse",
+                                                "nested": [
+                                                    {
+                                                        "name": "functionResponse",
+                                                        "spec": [
+                                                            {
+                                                                "help": "The name of the function to call.",
+                                                                "name": "name",
+                                                                "type": "text",
+                                                                "label": "Name",
+                                                                "required": true,
+                                                                "validate": {
+                                                                    "max": 64
+                                                                }
+                                                            },
+                                                            {
+                                                                "help": "The function response in JSON object format.",
+                                                                "name": "response",
+                                                                "type": "json",
+                                                                "label": "Response",
+                                                                "required": true
+                                                            }
+                                                        ],
+                                                        "type": "collection",
+                                                        "label": "Function Response"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "thoughtSignature",
+                                        "type": "text",
+                                        "label": "Thought Signature"
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Parts",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Messages",
+                        "required": true
+                    },
+                    {
+                        "name": "system_instruction",
+                        "spec": [
+                            {
+                                "name": "parts",
+                                "spec": {
+                                    "name": "value",
+                                    "spec": [
+                                        {
+                                            "name": "text",
+                                            "type": "text",
+                                            "label": "Value"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Prompt"
+                                },
+                                "type": "array",
+                                "label": "Prompts"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "System Instructions"
+                    },
+                    {
+                        "name": "safetySettings",
+                        "spec": [
+                            {
+                                "name": "category",
+                                "type": "select",
+                                "label": "Category",
+                                "options": [
+                                    {
+                                        "label": "Harassment content",
+                                        "value": "HARM_CATEGORY_HARASSMENT"
+                                    },
+                                    {
+                                        "label": "Hate speech and content",
+                                        "value": "HARM_CATEGORY_HATE_SPEECH"
+                                    },
+                                    {
+                                        "label": "Sexually explicit content.",
+                                        "value": "HARM_CATEGORY_SEXUALLY_EXPLICIT"
+                                    },
+                                    {
+                                        "label": "Dangerous content:",
+                                        "value": "HARM_CATEGORY_DANGEROUS_CONTENT"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "threshold",
+                                "type": "select",
+                                "label": "Threshold",
+                                "options": [
+                                    {
+                                        "label": "Block low and above.",
+                                        "value": "BLOCK_LOW_AND_ABOVE"
+                                    },
+                                    {
+                                        "label": "Block medium and above.",
+                                        "value": "BLOCK_MEDIUM_AND_ABOVE"
+                                    },
+                                    {
+                                        "label": "Block only high.",
+                                        "value": "BLOCK_ONLY_HIGH"
+                                    },
+                                    {
+                                        "label": "Block none.",
+                                        "value": "BLOCK_NONE"
+                                    }
+                                ]
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Safety Settings"
+                    },
+                    {
+                        "name": "generationConfig",
+                        "spec": [
+                            {
+                                "name": "stopSequences",
+                                "spec": {
+                                    "name": "value",
+                                    "type": "text",
+                                    "label": "Stop Sequence"
+                                },
+                                "type": "array",
+                                "label": "Stop Sequences"
+                            },
+                            {
+                                "name": "responseModalities",
+                                "type": "select",
+                                "label": "Response Modalities",
+                                "multiple": true,
+                                "validate": {
+                                    "enum": [
+                                        "text",
+                                        "image"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "maxOutputTokens",
+                                "type": "number",
+                                "label": "Max Output Tokens"
+                            },
+                            {
+                                "name": "temperature",
+                                "type": "number",
+                                "label": "Temperature",
+                                "validate": {
+                                    "max": 1,
+                                    "min": 0
+                                }
+                            },
+                            {
+                                "name": "topP",
+                                "type": "number",
+                                "label": "Top P",
+                                "validate": {
+                                    "max": 1,
+                                    "min": 0
+                                }
+                            },
+                            {
+                                "name": "topK",
+                                "type": "number",
+                                "label": "Top K"
+                            },
+                            {
+                                "name": "thinkingConfig",
+                                "spec": [
+                                    {
+                                        "name": "thinkingBudget",
+                                        "type": "number",
+                                        "label": "Thinking Budget"
+                                    },
+                                    {
+                                        "name": "include_thoughts",
+                                        "type": "boolean",
+                                        "label": "Include Thoughts"
+                                    },
+                                    {
+                                        "name": "thinking_level",
+                                        "type": "select",
+                                        "label": "Thinking Level",
+                                        "validate": {
+                                            "enum": [
+                                                "low",
+                                                "high"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Thinking Config"
+                            },
+                            {
+                                "name": "mediaResolution",
+                                "type": "select",
+                                "label": "Media Resolution",
+                                "validate": {
+                                    "enum": [
+                                        "media_resolution_low",
+                                        "media_resolution_medium",
+                                        "media_resolution_high"
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "imageConfig",
+                                "spec": [
+                                    {
+                                        "name": "imageSize",
+                                        "type": "select",
+                                        "label": "Image Size",
+                                        "validate": {
+                                            "enum": [
+                                                "1K",
+                                                "2K",
+                                                "4K"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "Image Configuration"
+                            },
+                            {
+                                "name": "responseMimeType",
+                                "type": "select",
+                                "label": "Response Format"
+                            },
+                            {
+                                "name": "responseSchema",
+                                "type": "any",
+                                "label": "Response Schema (Deprecated)"
+                            },
+                            {
+                                "name": "new_responseSchema",
+                                "spec": [
+                                    {
+                                        "name": "type",
+                                        "type": "select",
+                                        "label": "Value Type",
+                                        "options": [
+                                            {
+                                                "label": "String",
+                                                "value": "string",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=string"
+                                            },
+                                            {
+                                                "label": "Enum",
+                                                "value": "enum",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=enum"
+                                            },
+                                            {
+                                                "label": "Number",
+                                                "value": "number",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=number"
+                                            },
+                                            {
+                                                "label": "Integer",
+                                                "value": "integer",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=integer"
+                                            },
+                                            {
+                                                "label": "Boolean",
+                                                "value": "boolean",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=boolean"
+                                            },
+                                            {
+                                                "label": "Object",
+                                                "value": "object",
+                                                "nested": "rpc://gemini-ai/1/createResponseSchema?type=object"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "type": "array",
+                                "label": "Response Schema"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Generation configurations"
+                    },
+                    {
+                        "name": "tools",
+                        "type": "any",
+                        "label": "Tools"
+                    },
+                    {
+                        "name": "tool_config",
+                        "type": "any",
+                        "label": "Tool Config"
+                    },
+                    {
+                        "name": "function_declarations_context",
+                        "type": "boolean",
+                        "label": "Function Declarations Grounding"
+                    },
+                    {
+                        "name": "url_context",
+                        "type": "boolean",
+                        "label": "URL Context"
+                    },
+                    {
+                        "name": "google_search_context",
+                        "type": "boolean",
+                        "label": "Google Search Grounding"
+                    },
+                    {
+                        "name": "code_execution",
+                        "type": "boolean",
+                        "label": "Code Execution"
+                    },
+                    {
+                        "name": "google_maps_context",
+                        "type": "boolean",
+                        "label": "Google Maps Grounding"
+                    },
+                    {
+                        "name": "file_search_store_context",
+                        "type": "boolean",
+                        "label": "File Search Store Context"
+                    },
+                    {
+                        "name": "serviceTier",
+                        "type": "select",
+                        "label": "Inference Service Tier"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 20,
+            "module": "builtin:BasicFeeder",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "array": "{{3.result}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 1200,
+                    "y": 300
+                },
+                "restore": {},
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "array",
+                        "spec": [],
+                        "type": "array",
+                        "label": "Array",
+                        "editable": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 12,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "parameters": {
+                "else": 0
+            },
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 1500,
+                    "y": 300,
+                    "name": "penalty data exist"
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 13,
+                            "module": "builtin:BasicIfElse",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1798,
+                                    "y": 152,
+                                    "name": "does penalty apply"
+                                }
+                            },
+                            "branches": [
+                                {
+                                    "merge": false,
+                                    "label": "penalty apply",
+                                    "type": "condition",
+                                    "flow": [
+                                        {
+                                            "id": 17,
+                                            "module": "google-email:sendAnEmail",
+                                            "version": 4,
+                                            "parameters": {
+                                                "__IMTCONN__": 10397990
+                                            },
+                                            "mapper": {
+                                                "to": [
+                                                    "nightwraith18@gmail.com"
+                                                ],
+                                                "subject": "Penalty Applied – Vendor Payment Review",
+                                                "bodyType": "collection",
+                                                "contents": [
+                                                    {
+                                                        "text": "Dear Team,\n\nThis is to inform you that a penalty has been confirmed as applied to the following vendor invoice.\n\nVendor: {{20.`Vendor Name`}}\nInvoice ID: {{20.`Invoice ID`}}\nClaim Amount: {{20.`Claim Amount`}}{{20.Currency}}\nDue Date: {{20.`Due Date`}}\nPenalty Status: {{20.`Penalty Applied`}}\nFinal Payout: ₹{{20.`Final Payout (INR)`}}\nRisk Level: {{20.`Risk Level`}}\n\nReason / Risk Note:\n{{20.`Risk Notes`}}\n\nKey Issue:\n{{20.classification_note}}\n\nRecommended Action:\n{{20.`Recommended Action`}}\n\nPlease process the payment in accordance with the confirmed penalty and the recommended action above.\n\nRegards,\nVendor Risk & Audit Team",
+                                                        "image": {}
+                                                    }
+                                                ]
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2207,
+                                                    "y": 15
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "cc": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "to": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        },
+                                                        "bcc": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "from": {
+                                                            "mode": "chose",
+                                                            "label": "Empty"
+                                                        },
+                                                        "bodyType": {
+                                                            "label": "Collection of contents (text, images, etc.)"
+                                                        },
+                                                        "contents": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        },
+                                                        "signature": {
+                                                            "mode": "edit"
+                                                        },
+                                                        "attachments": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "emailHeaders": {
+                                                            "mode": "chose"
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "google-email"
+                                                            },
+                                                            "label": "Manikantha's Gmail connection (rajsurya.rajkumari@gmail.com)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:google-email",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "to",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "type": "email",
+                                                            "label": "Recipient email address",
+                                                            "required": true,
+                                                            "validate": true
+                                                        },
+                                                        "type": "array",
+                                                        "label": "To",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "subject",
+                                                        "type": "text",
+                                                        "label": "Subject"
+                                                    },
+                                                    {
+                                                        "name": "bodyType",
+                                                        "type": "select",
+                                                        "label": "Body type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "rawHtml",
+                                                                "collection"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "attachments",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "filename",
+                                                                    "type": "filename",
+                                                                    "label": "File name",
+                                                                    "required": true,
+                                                                    "semantic": "file:name"
+                                                                },
+                                                                {
+                                                                    "name": "data",
+                                                                    "type": "buffer",
+                                                                    "label": "Data",
+                                                                    "required": true,
+                                                                    "semantic": "file:data"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Attachment"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Attachments"
+                                                    },
+                                                    {
+                                                        "name": "from",
+                                                        "type": "select",
+                                                        "label": "From"
+                                                    },
+                                                    {
+                                                        "name": "cc",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "type": "email",
+                                                            "label": "Recipient email address"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "CC recipients"
+                                                    },
+                                                    {
+                                                        "name": "bcc",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "type": "email",
+                                                            "label": "Recipient email address"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "BCC recipients"
+                                                    },
+                                                    {
+                                                        "name": "emailHeaders",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "key",
+                                                                    "type": "text",
+                                                                    "label": "Key",
+                                                                    "required": true
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "text",
+                                                                    "label": "Value"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Email header"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Additional email headers"
+                                                    },
+                                                    {
+                                                        "name": "contents",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "text",
+                                                                    "type": "text",
+                                                                    "label": "Text"
+                                                                },
+                                                                {
+                                                                    "name": "image",
+                                                                    "spec": [
+                                                                        {
+                                                                            "name": "filename",
+                                                                            "type": "filename",
+                                                                            "label": "File name",
+                                                                            "semantic": "file:name"
+                                                                        },
+                                                                        {
+                                                                            "name": "data",
+                                                                            "type": "buffer",
+                                                                            "label": "Data",
+                                                                            "semantic": "file:data"
+                                                                        },
+                                                                        {
+                                                                            "name": "width",
+                                                                            "type": "uinteger",
+                                                                            "label": "Width"
+                                                                        },
+                                                                        {
+                                                                            "name": "height",
+                                                                            "type": "uinteger",
+                                                                            "label": "Height"
+                                                                        }
+                                                                    ],
+                                                                    "type": "collection",
+                                                                    "label": "Image"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Content"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Body contents"
+                                                    },
+                                                    {
+                                                        "name": "signature",
+                                                        "type": "select",
+                                                        "label": "Signature content"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ],
+                                    "conditions": [
+                                        [
+                                            {
+                                                "a": "{{20.application_tag}}",
+                                                "b": "PENALTY_APPLIES",
+                                                "o": "text:equal:ci"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "merge": false,
+                                    "disabled": false,
+                                    "label": "",
+                                    "type": "else",
+                                    "flow": [
+                                        {
+                                            "id": 18,
+                                            "module": "google-email:sendAnEmail",
+                                            "version": 4,
+                                            "parameters": {
+                                                "__IMTCONN__": 10397990
+                                            },
+                                            "filter": {
+                                                "name": "penalty not apply"
+                                            },
+                                            "mapper": {
+                                                "to": [
+                                                    "nightwraith18@gmail.com"
+                                                ],
+                                                "subject": "Penalty Not Applied – Vendor Payment Review",
+                                                "bodyType": "collection",
+                                                "contents": [
+                                                    {
+                                                        "text": "Dear Team,\n\nThis is to confirm that no penalty has been applied to the following vendor invoice.\n\nVendor: {{20.`Vendor Name`}}\nInvoice ID: {{20.`Invoice ID`}}\nClaim Amount: {{20.`Claim Amount`}}{{20.Currency}}\nDue Date: {{20.`Due Date`}}\nPenalty Status: {{20.`Penalty Applied`}}\nFinal Payout: ₹{{20.`Final Payout (INR)`}}\nRisk Level: {{20.`Risk Level`}}\n\nReason / Risk Note:\n{{20.`Risk Notes`}}\n\nAudit Status:\n{{20.`Audit Status`}}\n\nNo penalty adjustment is required based on the current audit result. Please proceed according to the recommended action, where applicable.\n\nRecommended Action:\n{{20.`Recommended Action`}}\n\nRegards,\nVendor Risk & Audit Team",
+                                                        "image": {}
+                                                    }
+                                                ]
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2265,
+                                                    "y": 369
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "cc": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "to": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        },
+                                                        "bcc": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "from": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "bodyType": {
+                                                            "label": "Collection of contents (text, images, etc.)"
+                                                        },
+                                                        "contents": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        },
+                                                        "signature": {
+                                                            "mode": "edit"
+                                                        },
+                                                        "attachments": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "emailHeaders": {
+                                                            "mode": "chose"
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "google-email"
+                                                            },
+                                                            "label": "Manikantha's Gmail connection (rajsurya.rajkumari@gmail.com)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:google-email",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "to",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "type": "email",
+                                                            "label": "Recipient email address",
+                                                            "required": true,
+                                                            "validate": true
+                                                        },
+                                                        "type": "array",
+                                                        "label": "To",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "subject",
+                                                        "type": "text",
+                                                        "label": "Subject"
+                                                    },
+                                                    {
+                                                        "name": "bodyType",
+                                                        "type": "select",
+                                                        "label": "Body type",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "rawHtml",
+                                                                "collection"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "attachments",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "filename",
+                                                                    "type": "filename",
+                                                                    "label": "File name",
+                                                                    "required": true,
+                                                                    "semantic": "file:name"
+                                                                },
+                                                                {
+                                                                    "name": "data",
+                                                                    "type": "buffer",
+                                                                    "label": "Data",
+                                                                    "required": true,
+                                                                    "semantic": "file:data"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Attachment"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Attachments"
+                                                    },
+                                                    {
+                                                        "name": "from",
+                                                        "type": "select",
+                                                        "label": "From"
+                                                    },
+                                                    {
+                                                        "name": "cc",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "type": "email",
+                                                            "label": "Recipient email address"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "CC recipients"
+                                                    },
+                                                    {
+                                                        "name": "bcc",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "type": "email",
+                                                            "label": "Recipient email address"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "BCC recipients"
+                                                    },
+                                                    {
+                                                        "name": "emailHeaders",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "key",
+                                                                    "type": "text",
+                                                                    "label": "Key",
+                                                                    "required": true
+                                                                },
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "text",
+                                                                    "label": "Value"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Email header"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Additional email headers"
+                                                    },
+                                                    {
+                                                        "name": "contents",
+                                                        "spec": {
+                                                            "name": "value",
+                                                            "spec": [
+                                                                {
+                                                                    "name": "text",
+                                                                    "type": "text",
+                                                                    "label": "Text"
+                                                                },
+                                                                {
+                                                                    "name": "image",
+                                                                    "spec": [
+                                                                        {
+                                                                            "name": "filename",
+                                                                            "type": "filename",
+                                                                            "label": "File name",
+                                                                            "semantic": "file:name"
+                                                                        },
+                                                                        {
+                                                                            "name": "data",
+                                                                            "type": "buffer",
+                                                                            "label": "Data",
+                                                                            "semantic": "file:data"
+                                                                        },
+                                                                        {
+                                                                            "name": "width",
+                                                                            "type": "uinteger",
+                                                                            "label": "Width"
+                                                                        },
+                                                                        {
+                                                                            "name": "height",
+                                                                            "type": "uinteger",
+                                                                            "label": "Height"
+                                                                        }
+                                                                    ],
+                                                                    "type": "collection",
+                                                                    "label": "Image"
+                                                                }
+                                                            ],
+                                                            "type": "collection",
+                                                            "label": "Content"
+                                                        },
+                                                        "type": "array",
+                                                        "label": "Body contents"
+                                                    },
+                                                    {
+                                                        "name": "signature",
+                                                        "type": "select",
+                                                        "label": "Signature content"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 19,
+                            "module": "google-email:sendAnEmail",
+                            "version": 4,
+                            "parameters": {
+                                "__IMTCONN__": 10397990
+                            },
+                            "filter": {
+                                "name": "penalty not apply",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{20.existence_tag}}",
+                                            "b": "NO_PENALTY",
+                                            "o": "text:equal:ci"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "to": [
+                                    "nightwraith18@gmail.com"
+                                ],
+                                "subject": "Invalid Penalty – Review Required",
+                                "bodyType": "collection",
+                                "contents": [
+                                    {
+                                        "text": "Dear Team,\n\nA penalty-related issue has been identified for the following vendor invoice and requires review before payment is processed.\n\nVendor: {{20.`Vendor Name`}}\nInvoice ID: {{20.`Invoice ID`}}\nClaim Amount: {{20.`Claim Amount`}}{{20.Currency}}\nDue Date: {{20.`Due Date`}}\nPenalty Status: {{20.`Penalty Applied`}}\nFinal Payout: ₹{{20.`Final Payout (INR)`}}\nRisk Level: {{20.`Risk Level`}}\nAudit Status: {{20.`Audit Status`}}\n\nRisk / Supporting Information:\n{{20.`Risk Notes`}}\n\nKey Issue:\n{{20.`Key Issue`}}\n\nRecommended Action:\n{{20.`Recommended Action`}}\n\nPlease review the penalty validity and resolve the identified issue before clearing the payment.",
+                                        "image": {}
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1856,
+                                    "y": 570
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "cc": {
+                                            "mode": "chose"
+                                        },
+                                        "to": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "bcc": {
+                                            "mode": "chose"
+                                        },
+                                        "from": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        },
+                                        "bodyType": {
+                                            "label": "Collection of contents (text, images, etc.)"
+                                        },
+                                        "contents": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "signature": {
+                                            "mode": "edit"
+                                        },
+                                        "attachments": {
+                                            "mode": "chose"
+                                        },
+                                        "emailHeaders": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "google-email"
+                                            },
+                                            "label": "Manikantha's Gmail connection (rajsurya.rajkumari@gmail.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:google-email",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "to",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address",
+                                            "required": true,
+                                            "validate": true
+                                        },
+                                        "type": "array",
+                                        "label": "To",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "subject",
+                                        "type": "text",
+                                        "label": "Subject"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "rawHtml",
+                                                "collection"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "attachments",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "filename",
+                                                    "type": "filename",
+                                                    "label": "File name",
+                                                    "required": true,
+                                                    "semantic": "file:name"
+                                                },
+                                                {
+                                                    "name": "data",
+                                                    "type": "buffer",
+                                                    "label": "Data",
+                                                    "required": true,
+                                                    "semantic": "file:data"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Attachment"
+                                        },
+                                        "type": "array",
+                                        "label": "Attachments"
+                                    },
+                                    {
+                                        "name": "from",
+                                        "type": "select",
+                                        "label": "From"
+                                    },
+                                    {
+                                        "name": "cc",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address"
+                                        },
+                                        "type": "array",
+                                        "label": "CC recipients"
+                                    },
+                                    {
+                                        "name": "bcc",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address"
+                                        },
+                                        "type": "array",
+                                        "label": "BCC recipients"
+                                    },
+                                    {
+                                        "name": "emailHeaders",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Key",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Value"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Email header"
+                                        },
+                                        "type": "array",
+                                        "label": "Additional email headers"
+                                    },
+                                    {
+                                        "name": "contents",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "text",
+                                                    "type": "text",
+                                                    "label": "Text"
+                                                },
+                                                {
+                                                    "name": "image",
+                                                    "spec": [
+                                                        {
+                                                            "name": "filename",
+                                                            "type": "filename",
+                                                            "label": "File name",
+                                                            "semantic": "file:name"
+                                                        },
+                                                        {
+                                                            "name": "data",
+                                                            "type": "buffer",
+                                                            "label": "Data",
+                                                            "semantic": "file:data"
+                                                        },
+                                                        {
+                                                            "name": "width",
+                                                            "type": "uinteger",
+                                                            "label": "Width"
+                                                        },
+                                                        {
+                                                            "name": "height",
+                                                            "type": "uinteger",
+                                                            "label": "Height"
+                                                        }
+                                                    ],
+                                                    "type": "collection",
+                                                    "label": "Image"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Content"
+                                        },
+                                        "type": "array",
+                                        "label": "Body contents"
+                                    },
+                                    {
+                                        "name": "signature",
+                                        "type": "select",
+                                        "label": "Signature content"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.make.com",
+        "notes": []
+    }
+}
